@@ -61,18 +61,30 @@ const Chat = ({ currentUser, onViewProfile, initialSelectedUser, users }) => {
     setText('');
   };
 
-  const mutualFriends = users.filter(u => 
-      u.id !== currentUser.id && 
-      (currentUser.following || []).includes(u.id) && 
-      (u.following || []).includes(currentUser.id)
-  );
+  // Get all users who have exchanged messages with current user (for Obrolan tab)
+  const usersWithMessages = users.filter(u => {
+      if (u.id === currentUser.id) return false;
+      const hasMessages = allMyMessages.some(m => 
+          (m.senderId === currentUser.id && m.receiverId === u.id) ||
+          (m.senderId === u.id && m.receiverId === currentUser.id)
+      );
+      return hasMessages;
+  });
 
-  const requestUsers = users.filter(u => 
-      u.id !== currentUser.id && 
-      !((currentUser.following || []).includes(u.id) && (u.following || []).includes(currentUser.id))
-  );
+  // For Permintaan: show users without mutual follow AND without any messages yet
+  const requestUsers = users.filter(u => {
+      if (u.id === currentUser.id) return false;
+      const isMutual = (currentUser.following || []).includes(u.id) && 
+                       (u.following || []).includes(currentUser.id);
+      const hasMessages = allMyMessages.some(m => 
+          (m.senderId === currentUser.id && m.receiverId === u.id) ||
+          (m.senderId === u.id && m.receiverId === currentUser.id)
+      );
+      // Show in Permintaan if: not mutual friends AND no messages yet
+      return !isMutual && !hasMessages;
+  });
 
-  let displayUsers = activeChatTab === 'chats' ? mutualFriends : requestUsers;
+  let displayUsers = activeChatTab === 'chats' ? usersWithMessages : requestUsers;
 
   const getLastTimestamp = (userId) => {
       const interaction = allMyMessages.filter(m => 
