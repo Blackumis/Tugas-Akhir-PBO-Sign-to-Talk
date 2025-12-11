@@ -1,14 +1,14 @@
 import React from 'react';
-import { LogOut, Radio } from 'lucide-react';
+import { LogOut, Radio, Home, MessageCircle, GraduationCap, Users, User } from 'lucide-react';
 
 const Sidebar = ({ activeTab, setActiveTab, onLogout }) => {
   const menuItems = [
-    { id: 'feed', icon: '◫', label: 'Feed' },
-    { id: 'chat', icon: '◉', label: 'Chat' },
+    { id: 'feed', icon: <Home size={24} />, label: 'Feed' },
+    { id: 'chat', icon: <MessageCircle size={24} />, label: 'Chat' },
     { id: 'live', icon: <Radio size={24} />, label: 'Live' }, 
-    { id: 'learn', icon: '◐', label: 'Learn' },
-    { id: 'friends', icon: '◎', label: 'Friends' },
-    { id: 'profile', icon: '◉', label: 'Profile' }
+    { id: 'learn', icon: <GraduationCap size={24} />, label: 'Learn' },
+    { id: 'friends', icon: <Users size={24} />, label: 'Friends' },
+    { id: 'profile', icon: <User size={24} />, label: 'Profile' }
   ];
 
   return (
